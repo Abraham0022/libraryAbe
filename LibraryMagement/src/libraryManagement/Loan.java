@@ -5,20 +5,22 @@ import java.time.LocalDate;
 import exceptions.InvalidLoanException;
 
 public class Loan {
-	private String bookCode, bookTitle;
-	private final String REG_BOOK_CODE = "[A-Z]{3}\\d{4}";
-	private User libraryMember;
+	private String				bookCode, bookTitle;
+	private final String	REG_BOOK_CODE	= "[A-Z]{3}\\d{4}";
+	private User					libraryMember;
+
 	public User getLibraryMember() {
 		return libraryMember;
-	
+
 	}
 
 	public void setLibraryMember(User libraryMember) throws InvalidLoanException {
-		if(libraryMember!=null)
+		if (libraryMember != null)
 			throw new InvalidLoanException("Library member in null");
 		this.libraryMember = libraryMember;
-	
+
 	}
+
 	private LocalDate loanDate, dueDate, actualReturnDate;
 
 	public Loan(String bookCode, String bookTitle, User member, LocalDate loanDate) throws InvalidLoanException {
@@ -30,19 +32,28 @@ public class Loan {
 
 	}
 
-	public String getBookCode() {
-		return bookCode;
+	public int calculateDelayDays() {
+		int numDays;
+
+		if (dueDate == null) {
+			numDays = actualReturnDate.minus(LocalDate.now());
+			return 0;
+		}
+		if (!isOverdue()) {
+			return 0;
+		}
 
 	}
 
-	public String getBookTitle() {
-		return bookTitle;
-
-	}
-
-	public LocalDate getDueDate() {
-		return dueDate;
-
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isOverdue() {
+		if (dueDate.isAfter(LocalDate.now())) {
+			return true;
+		} else
+			return false;
 	}
 
 	public void setBookCode(String bookCode) throws InvalidLoanException {
@@ -50,7 +61,6 @@ public class Loan {
 			throw new InvalidLoanException("Bad book Code");
 		else
 			this.bookCode = bookCode;
-
 	}
 
 	public void setBookTitle(String bookTitle) throws InvalidLoanException {
@@ -58,7 +68,6 @@ public class Loan {
 			throw new InvalidLoanException("Book title is empty");
 		else
 			this.bookTitle = bookTitle;
-
 	}
 
 	public void setLoanDate(LocalDate loanDate) throws InvalidLoanException {
@@ -66,19 +75,37 @@ public class Loan {
 			throw new InvalidLoanException("Bad Loan Date");
 		else
 			this.loanDate = loanDate;
-
 	}
-  public void registerReturn(LocalDate date) throws InvalidLoanException {
-  	if (date == null) {
-  		throw new InvalidLoanException("Bad return date, could not be null");
-  	}else if(date.compareTo(LocalDate.now()) > 0)
+
+	public void registerReturn(LocalDate date) throws InvalidLoanException {
+		if (date == null) {
+			throw new InvalidLoanException("Bad return date, could not be null");
+		} else if (date.compareTo(LocalDate.now()) > 0)
 			throw new InvalidLoanException("Bad return date it is set before the loan date");
 		else
 			this.actualReturnDate = date;
-  }
+	}
+
 	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
+	}
 
+	public String getBookCode() {
+		return bookCode;
+	}
+
+	public String getBookTitle() {
+		return bookTitle;
+	}
+
+	public LocalDate getDueDate() {
+		return dueDate;
+	}
+
+	@Override
+	public String toString() {
+		return "User: " + libraryMember.toString() + "\n Loan [bookCode=" + bookCode + ", bookTitle=" + bookTitle
+		    + ", loanDate=" + loanDate + ", dueDate=" + dueDate + ", actualReturnDate=" + actualReturnDate + "]";
 	}
 
 }
