@@ -100,10 +100,9 @@ public class User {
 				+ registrationDate + ", sanctionEndDate=" + sanctionEndDate + ", santioned=" + santioned;
 	}
 	
-//	public void setSanctionEndDate(LocalDate sanctionEndDate) {
-//		this.sanctionEndDate = sanctionEndDate;
-//
-//	}
+
+
+	
 
 	
 }

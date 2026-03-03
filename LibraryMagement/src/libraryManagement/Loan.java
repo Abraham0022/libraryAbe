@@ -8,41 +8,48 @@ public class Loan {
 	private String				bookCode, bookTitle;
 	private final String	REG_BOOK_CODE	= "[A-Z]{3}\\d{4}";
 	private User					libraryMember;
-
+	private LocalDate loanDate, dueDate, actualReturnDate;
+	
+	
 	public User getLibraryMember() {
 		return libraryMember;
 
 	}
 
 	public void setLibraryMember(User libraryMember) throws InvalidLoanException {
-		if (libraryMember != null)
+		if (libraryMember == null)
 			throw new InvalidLoanException("Library member in null");
 		this.libraryMember = libraryMember;
 
 	}
 
-	private LocalDate loanDate, dueDate, actualReturnDate;
-
 	public Loan(String bookCode, String bookTitle, User member, LocalDate loanDate) throws InvalidLoanException {
 		super();
 		setBookCode(bookCode);
-		setBookCode(bookCode);
+		setBookTitle(bookTitle);
 		setLibraryMember(member);
 		setLoanDate(loanDate);
+		setDueDate();
 
 	}
 
-	public int calculateDelayDays() {
-		int numDays;
+	public LocalDate getLoanDate() {
+		return loanDate;
+	
+	}
 
-		if (dueDate == null) {
-			numDays = actualReturnDate.minus(LocalDate.now());
-			return 0;
-		}
+	public int calculateDelayDays() {
+		long year,month,numDays;
+		LocalDate today=LocalDate.now();
+		
 		if (!isOverdue()) {
 			return 0;
+		}else	if (actualReturnDate == null) {
+			numDays = today.toEpochDay()-dueDate.toEpochDay();
+		}else {
+			numDays = actualReturnDate.toEpochDay()-dueDate.toEpochDay();
 		}
-
+		return (int)numDays;
 	}
 
 	/**
@@ -50,7 +57,7 @@ public class Loan {
 	 * @return
 	 */
 	public boolean isOverdue() {
-		if (dueDate.isAfter(LocalDate.now())) {
+		if (dueDate.isBefore(LocalDate.now())) {
 			return true;
 		} else
 			return false;
@@ -86,8 +93,8 @@ public class Loan {
 			this.actualReturnDate = date;
 	}
 
-	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
+	public void setDueDate() {
+		this.dueDate = loanDate.plusDays(14);
 	}
 
 	public String getBookCode() {
