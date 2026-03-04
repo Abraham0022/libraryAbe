@@ -6,7 +6,7 @@ import exceptions.InvalidLoanException;
 
 public class Loan {
 	private String				bookCode, bookTitle;
-	private final String	REG_BOOK_CODE	= "[A-Z]{3}\\d{4}";
+	private final String	REG_BOOK_CODE	= "[A-Z]{3}[0-9]{4}";
 	private User					libraryMember;
 	private LocalDate loanDate, dueDate, actualReturnDate;
 	
