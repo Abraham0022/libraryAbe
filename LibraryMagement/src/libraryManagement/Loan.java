@@ -18,7 +18,7 @@ public class Loan {
 
 	public void setLibraryMember(User libraryMember) throws InvalidLoanException {
 		if (libraryMember == null)
-			throw new InvalidLoanException("Library member in null");
+			throw new InvalidLoanException("Library member is null");
 		this.libraryMember = libraryMember;
 
 	}
@@ -39,7 +39,7 @@ public class Loan {
 	}
 
 	public int calculateDelayDays() {
-		long year,month,numDays;
+		long numDays;
 		LocalDate today=LocalDate.now();
 		
 		if (!isOverdue()) {

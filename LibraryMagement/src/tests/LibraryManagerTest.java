@@ -7,9 +7,11 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import exceptions.BookNotAvailableException;
 import exceptions.InvalidLoanException;
 import exceptions.InvalidUserException;
 import exceptions.RepeatedUserException;
+import exceptions.SanctionedUserException;
 import libraryManagement.LibraryManager;
 import libraryManagement.User;
 
@@ -36,6 +38,46 @@ class LibraryManagerTest {
 		}
 		assert libMan.getUserList().size()==3;
 	}
+	
+	@Test
+	void testRegisterUserRepeated() {
+		
+		Exception ex=	assertThrows(RepeatedUserException.class, () -> {
+				libMan.registerUser(new User("Bacterio", "bacterio@tia.es", "SOC00002", today));
+    });
+	}
+	
+	@Test
+	void testRegisterLoanSanctioned() {
+		User u;
+		try {
+			u = new User("Clemencio", "clemencio@tia.es", "SOC00003", today.minusWeeks(4));
+						
+			libMan.registerUser(u);
+			libMan.registerLoan("LIB0001","Title",u,today.minusDays(20));
+			libMan.returnBook("LIB0001", today);
+			Exception ex=	assertThrows(SanctionedUserException.class, () -> {
+				libMan.registerLoan("LIB0001","Title",u,today.minusDays(20));
+			});
+		} catch (InvalidUserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepeatedUserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidLoanException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SanctionedUserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BookNotAvailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//------- MOVE TO USERTEST
 	@Test
 	void testBadEmailUser1() {
 		try {
@@ -124,7 +166,6 @@ class LibraryManagerTest {
 	@Test
 	void testReturnBook() {
 		fail("Not yet implemented");
-
 	}
 
 }

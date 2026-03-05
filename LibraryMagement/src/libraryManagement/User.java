@@ -8,6 +8,8 @@ public class User {
 	private String name, email, memberNumber;
 	private LocalDate registrationDate, sanctionEndDate;
 	private boolean santioned;
+	
+
 	// regular expresion to check emails
 	private String emailRegex = "[\\w.-]+@[\\w.-]+\\.\\w{2,3}";
 
@@ -93,7 +95,11 @@ public class User {
 	public void setRegistrationDate(LocalDate registrationDate) {
 		this.registrationDate = registrationDate;
 	}
-
+	
+	public void setSantioned(boolean santioned) {
+		this.santioned = santioned;
+	
+	}
 	@Override
 	public String toString() {
 		return "User "+memberNumber+" name=" + name + ", email=" + email + ", registrationDate="
