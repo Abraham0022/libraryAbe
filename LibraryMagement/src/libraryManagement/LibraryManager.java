@@ -22,7 +22,7 @@ public class LibraryManager {
 	}
 
 	public void registerLoan(String bookCode, String bookTitle, User member, LocalDate loanDate)
-			throws InvalidLoanException, SanctionedUserException, RepeatedUserException {
+			throws InvalidLoanException, SanctionedUserException {
 		if (member.isSantioned()) {
 			throw new SanctionedUserException("The User is Sanctioned until " + member.getSanctionEndDate().toString());
 		} else if (findUser(member.getMemberNumber()) == null) {

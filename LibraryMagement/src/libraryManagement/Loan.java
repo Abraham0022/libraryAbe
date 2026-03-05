@@ -78,9 +78,12 @@ public class Loan {
 	}
 
 	public void setLoanDate(LocalDate loanDate) throws InvalidLoanException {
+		//cheks if is null or a future date
 		if (loanDate == null || loanDate.compareTo(LocalDate.now()) > 0)
 			throw new InvalidLoanException("Bad Loan Date");
-		else
+		else if(loanDate.compareTo(libraryMember.getRegistrationDate()) < 0) {
+			throw new InvalidLoanException("Bad Loan Date; previous to user registration");
+		}
 			this.loanDate = loanDate;
 	}
 
